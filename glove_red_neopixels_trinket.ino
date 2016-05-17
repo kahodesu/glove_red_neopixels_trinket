@@ -6,20 +6,17 @@
 #include <avr/power.h>
 #endif
 
-// Which pin on the Arduino is connected to the NeoPixels?
-// On a Trinket or Gemma we suggest changing this to 1
+//because neopixels are connected to pin #1 on the Trinket
 #define PIN            1
 
-// How many NeoPixels are attached to the Arduino?
+// Number of neopixels
 #define NUMPIXELS      1
 
-// When we setup the NeoPixel library, we tell it how many pixels, and which pin to use to send signals.
-// Note that for older NeoPixel strips you might need to change the third parameter--see the strandtest
-// example for more information on possible values.
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 int delayval = 500; // delay for half a second
 
+//because Glove is connected to pin #0 on Trinket
 #define GLOVE 0
 
 
@@ -29,18 +26,20 @@ void setup() {
   if (F_CPU == 16000000) clock_prescale_set(clock_div_1);
 #endif
   // End of trinket special code
-
   pixels.begin(); // This initializes the NeoPixel library.
 
+  //Sets up glove as input, just like in original example
   pinMode(GLOVE, INPUT);
   digitalWrite(GLOVE, HIGH);
 }
 
 void loop() {
+  
+  //if glove is in contact with other glove
   if (digitalRead(GLOVE) == LOW)
   {
-    // For a set of NeoPixels the first NeoPixel is 0, second is 1, all the way up to the count of pixels minus one.
 
+    //make neopixels RED
     for (int i = 0; i < NUMPIXELS; i++) {
 
       // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
@@ -49,12 +48,11 @@ void loop() {
 
       delay(delayval); // Delay for a period of time (in milliseconds).
     }
-
-
-
   }
+  
+   //Otherwise, don't light them at all. 
   else {
-for (int i = 0; i < NUMPIXELS; i++) {
+    for (int i = 0; i < NUMPIXELS; i++) {
 
       // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
       pixels.setPixelColor(i, pixels.Color(0, 0, 0));
@@ -62,9 +60,5 @@ for (int i = 0; i < NUMPIXELS; i++) {
 
       delay(delayval); // Delay for a period of time (in milliseconds).
     }
-
-
-
-  
   }
 }
